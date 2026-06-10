@@ -1,0 +1,376 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+body{font-family:var(--font-sans,-apple-system,sans-serif);color:var(--color-text-primary)}
+.wrap{max-width:760px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:12px}
+.logo{width:38px;height:38px;background:var(--color-background-info);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.h1{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.header-btns{display:flex;gap:6px;flex-shrink:0}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);margin-bottom:8px}
+.bar-label{font-size:12px;color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}
+.bar input[type=text],.bar input[type=password]{flex:1;font-size:12px;background:transparent;border:none;color:var(--color-text-primary);outline:none;font-family:monospace;min-width:0;padding:0;height:auto;box-shadow:none}
+.bar select{flex:1;font-size:12px;background:transparent;border:none;color:var(--color-text-primary);outline:none;cursor:pointer;padding:0;height:auto;box-shadow:none}
+.hint{font-size:11px;color:var(--color-text-tertiary);margin-bottom:1rem}
+.hint a{color:var(--color-text-info)}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:1.25rem 0}
+.upload-zone{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:2rem 1rem;text-align:center;cursor:pointer;margin-bottom:1.5rem;transition:background 0.15s}
+.upload-zone:hover,.upload-zone.drag{background:var(--color-background-info);border-color:var(--color-border-info)}
+.upload-zone i{font-size:32px;color:var(--color-text-secondary);display:block;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:var(--color-text-secondary);margin-bottom:4px}
+.upload-zone small{font-size:11px;color:var(--color-text-tertiary)}
+.preview-img{width:100%;max-height:260px;object-fit:contain;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);margin-bottom:1rem}
+.note-box{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:1.5rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font-size:11px;padding:3px 9px;border-radius:99px;border:0.5px solid var(--color-border-warning);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer}
+.chip:hover{background:var(--color-background-warning)}
+textarea{width:100%;font-size:13px;font-family:inherit;line-height:1.65;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);resize:vertical;min-height:200px;outline:none}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+button{font-size:12px;font-weight:500;padding:6px 13px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+button:hover{background:var(--color-background-secondary)}
+button:disabled{opacity:0.5;cursor:not-allowed}
+.btn-primary{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.btn-green{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.btn-amber{background:var(--color-background-warning);border-color:var(--color-border-warning);color:var(--color-text-warning)}
+.btn-danger{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:500}
+.badge.loading{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge.done{background:var(--color-background-success);color:var(--color-text-success)}
+.badge.error{background:var(--color-background-danger);color:var(--color-text-danger)}
+.spinner{width:10px;height:10px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;display:inline-block;animation:spin 0.65s linear infinite}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.tab-row{display:flex;gap:4px;margin-bottom:10px;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:8px}
+.tab{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500}
+.result-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;animation:fadeIn 0.2s ease}
+.result-content{font-size:13px;line-height:1.75;color:var(--color-text-primary);white-space:pre-wrap;margin-top:8px}
+.result-actions{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--color-text-primary);color:var(--color-background-primary);font-size:12px;font-weight:500;padding:8px 16px;border-radius:99px;z-index:999;white-space:nowrap;pointer-events:none}
+.history-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);margin-bottom:6px;cursor:pointer;background:var(--color-background-primary)}
+.history-item:hover{background:var(--color-background-secondary)}
+.history-thumb{width:40px;height:40px;object-fit:cover;border-radius:4px;border:0.5px solid var(--color-border-tertiary);flex-shrink:0}
+.history-info{flex:1;min-width:0}
+.history-title{font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.compare-col{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.compare-col h3{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.04em}
+@media(max-width:520px){.compare-grid{grid-template-columns:1fr}}
+/* Modal overlay — dùng normal-flow container tránh fixed */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:1.5rem;width:min(480px,92vw);border:0.5px solid var(--color-border-secondary);max-height:80vh;overflow-y:auto}
+.modal-box h2{font-size:15px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.modal-box p{font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.6}
+.modal-box ol{font-size:13px;color:var(--color-text-secondary);padding-left:20px;line-height:2.2}
+.modal-box ol a{color:var(--color-text-info)}
+.info-box{margin-top:12px;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;font-family:monospace;color:var(--color-text-secondary);line-height:1.6}
+</style>
+
+<div class="wrap">
+<div class="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="logo"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+    <div>
+      <p class="h1">Số hóa đề thi AI</p>
+      <p class="sub">Tải ảnh → thêm lưu ý → Claude số hóa → remix → hướng dẫn giải</p>
+    </div>
+  </div>
+  <div class="header-btns">
+    <button onclick="document.getElementById('history-panel').style.display=document.getElementById('history-panel').style.display==='none'?'block':'none'">
+      <i class="ti ti-history" aria-hidden="true"></i> Lịch sử
+    </button>
+    <button onclick="document.getElementById('share-modal').classList.add('open')">
+      <i class="ti ti-share" aria-hidden="true"></i> Chia sẻ
+    </button>
+  </div>
+</div>
+
+<div id="history-panel" style="display:none;margin-bottom:1rem">
+  <div class="section-label"><i class="ti ti-history" style="font-size:13px" aria-hidden="true"></i> Đề đã số hóa</div>
+  <div id="history-list" style="margin-top:8px"><p style="font-size:12px;color:var(--color-text-tertiary)">Chưa có đề nào trong lịch sử.</p></div>
+  <button class="btn-danger" style="margin-top:8px;font-size:11px;padding:4px 10px" onclick="clearHistory()"><i class="ti ti-trash" aria-hidden="true"></i> Xóa lịch sử</button>
+</div>
+
+<div class="divider"></div>
+
+<div class="bar">
+  <span class="bar-label"><i class="ti ti-key" style="font-size:13px" aria-hidden="true"></i> OpenRouter key (tuỳ chọn):</span>
+  <input type="password" id="or-key-input" placeholder="sk-or-v1-... (chỉ cần khi dùng model phụ)" />
+  <button style="padding:3px 8px;font-size:11px" onclick="toggleKeyVisibility()"><i class="ti ti-eye" id="eye-icon" aria-hidden="true"></i></button>
+  <button class="btn-primary" style="padding:3px 10px;font-size:11px" onclick="saveOrKey()">Lưu</button>
+  <span id="key-saved" style="display:none;font-size:11px;color:var(--color-text-success)"><i class="ti ti-check" aria-hidden="true"></i> Đã lưu</span>
+</div>
+<p class="hint">✦ Số hóa ảnh dùng Claude AI — không cần key. OpenRouter key chỉ cần khi chọn model phụ. Lấy miễn phí tại <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></p>
+
+<div class="bar">
+  <span class="bar-label"><i class="ti ti-robot" style="font-size:13px" aria-hidden="true"></i> Model (remix & giải):</span>
+  <select id="model-select">
+    <option value="claude">✦ Claude AI (khuyến nghị)</option>
+    <option value="google/gemma-4-31b-it:free">google/gemma-4-31b-it:free</option>
+    <option value="nvidia/nemotron-3-ultra-550b-a55b:free">nvidia/nemotron-3-ultra-550b-a55b:free</option>
+    <option value="openai/gpt-oss-120b:free">openai/gpt-oss-120b:free</option>
+    <option value="moonshotai/kimi-k2.6:free">moonshotai/kimi-k2.6:free</option>
+  </select>
+</div>
+<div class="divider"></div>
+
+<div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+  <i class="ti ti-upload" aria-hidden="true"></i>
+  <p>Kéo thả hoặc bấm để chọn ảnh đề thi</p>
+  <small>JPG, PNG, WEBP — thêm lưu ý bên dưới rồi bấm số hóa</small>
+  <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+</div>
+
+<div id="image-section" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-photo" style="font-size:13px" aria-hidden="true"></i> Ảnh đề thi</span>
+    <span id="digitize-badge"></span>
+  </div>
+  <img id="preview-img" class="preview-img" alt="Ảnh đề thi" />
+  <div class="note-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:12px;font-weight:500;color:var(--color-text-warning)"><i class="ti ti-notes" style="font-size:13px" aria-hidden="true"></i> Lưu ý cho AI trước khi số hóa</span>
+      <span style="font-size:11px;color:var(--color-text-tertiary)">Tuỳ chọn</span>
+    </div>
+    <div class="chips" id="chips-row"></div>
+    <textarea id="note-input" style="min-height:64px;max-height:120px;border:0.5px solid var(--color-border-warning)" placeholder="Ví dụ: Đề Toán lớp 10, có công thức lượng giác..."></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" id="digitize-btn" onclick="runDigitize()"><i class="ti ti-sparkles" aria-hidden="true"></i> Số hóa bằng Claude</button>
+    <button onclick="clearAll()"><i class="ti ti-x" aria-hidden="true"></i> Xóa</button>
+  </div>
+</div>
+
+<div id="exam-section" style="display:none">
+  <div class="divider"></div>
+  <div class="section-label"><i class="ti ti-file-description" style="font-size:13px" aria-hidden="true"></i> Nội dung đề thi (có thể chỉnh sửa)</div>
+  <textarea id="exam-text" placeholder="Nội dung đề thi sau khi số hóa sẽ hiện ở đây..."></textarea>
+  <div class="btn-row" style="margin-top:8px">
+    <button class="btn-primary" id="remix-btn" onclick="runAI('remix')"><i class="ti ti-refresh" aria-hidden="true"></i> Remix đề mới</button>
+    <button class="btn-green" id="solution-btn" onclick="runAI('solution')"><i class="ti ti-bulb" aria-hidden="true"></i> Hướng dẫn giải</button>
+    <button onclick="copyText(document.getElementById('exam-text').value)"><i class="ti ti-copy" aria-hidden="true"></i> Sao chép</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-amber" onclick="saveDocx(document.getElementById('exam-text').value,'De_thi_goc')"><i class="ti ti-file-word" aria-hidden="true"></i> Lưu .docx</button>
+    <button class="btn-amber" onclick="savePdf(document.getElementById('exam-text').value,'De_thi_goc')"><i class="ti ti-file-type-pdf" aria-hidden="true"></i> Lưu .pdf</button>
+    <button class="btn-amber" onclick="savePng()"><i class="ti ti-photo-down" aria-hidden="true"></i> Xuất PNG</button>
+  </div>
+
+  <div id="results-section" style="display:none">
+    <div class="divider"></div>
+    <div class="tab-row">
+      <button class="tab active" id="tab-remix" onclick="switchTab('remix')"><i class="ti ti-refresh" aria-hidden="true"></i> Đề mới</button>
+      <button class="tab" id="tab-solution" onclick="switchTab('solution')"><i class="ti ti-bulb" aria-hidden="true"></i> Hướng dẫn giải</button>
+      <button class="tab" id="tab-compare" onclick="switchTab('compare')"><i class="ti ti-columns" aria-hidden="true"></i> So sánh</button>
+    </div>
+    <div id="panel-remix"></div>
+    <div id="panel-solution" style="display:none"></div>
+    <div id="panel-compare" style="display:none"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" style="display:none"></div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal-overlay" id="share-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <h2>
+      <span><i class="ti ti-share" style="font-size:15px;margin-right:6px" aria-hidden="true"></i>Chia sẻ ứng dụng</span>
+      <button style="padding:3px 8px;border:none" onclick="document.getElementById('share-modal').classList.remove('open')"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </h2>
+    <p>App này chạy trong Claude.ai artifact. Để chia sẻ link cho người khác dùng độc lập, cần deploy ra ngoài:</p>
+    <ol>
+      <li>Bấm nút <strong>Export</strong> trên artifact (góc trên phải)</li>
+      <li>Tải về file <code style="font-size:11px;background:var(--color-background-secondary);padding:1px 5px;border-radius:4px">index.html</code></li>
+      <li>Kéo thả vào <a href="https://app.netlify.com/drop" target="_blank">netlify.com/drop</a> → có link ngay trong 30 giây</li>
+      <li>Hoặc upload lên <a href="https://github.com/new" target="_blank">GitHub</a> → bật Pages → link cố định miễn phí</li>
+    </ol>
+    <div class="info-box">
+      💡 Khi deploy ra ngoài:<br>
+      · Người dùng cần nhập OpenRouter key của họ để dùng model phụ<br>
+      · Tính năng số hóa bằng Claude <strong>chỉ hoạt động trong Claude.ai</strong> (API key được inject sẵn)<br>
+      · Lịch sử đề lưu trong localStorage trình duyệt của từng người
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+      <button class="btn-primary" onclick="copyAppUrl()"><i class="ti ti-link" aria-hidden="true"></i> Sao chép link cuộc hội thoại</button>
+      <button onclick="document.getElementById('share-modal').classList.remove('open')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const ANTHROPIC_URL="https://api.anthropic.com/v1/messages";
+const OR_URL="https://openrouter.ai/api/v1/chat/completions";
+const CLAUDE_MODEL="claude-sonnet-4-20250514";
+const CHIPS=["Đây là đề Toán lớp 12","Đây là đề Vật Lý","Đây là đề Hóa học","Đây là đề Tiếng Anh","Giữ nguyên ký hiệu toán học","Chữ viết tay, đọc kỹ","Ảnh hơi mờ, cố gắng đọc","Có công thức hóa học","Trắc nghiệm A/B/C/D","Tự luận, giữ cấu trúc đoạn"];
+
+const lsGet=(k)=>{try{return localStorage.getItem(k)||""}catch{return""}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch{}};
+
+let imgBase64=null,imgMime="image/jpeg",imgSrc=null,remixText=null,solutionText=null,toastTimer=null;
+
+(()=>{
+  const saved=lsGet("or_key");
+  if(saved){document.getElementById("or-key-input").value=saved;document.getElementById("key-saved").style.display="inline-flex";}
+  const chipsEl=document.getElementById("chips-row");
+  CHIPS.forEach(c=>{const s=document.createElement("span");s.className="chip";s.textContent=c;s.onclick=()=>{const ta=document.getElementById("note-input");ta.value=ta.value?(ta.value+". "+c):c};chipsEl.appendChild(s);});
+  const uz=document.getElementById("upload-zone");
+  uz.ondragover=e=>{e.preventDefault();uz.classList.add("drag")};
+  uz.ondragleave=()=>uz.classList.remove("drag");
+  uz.ondrop=e=>{e.preventDefault();uz.classList.remove("drag");handleFile(e.dataTransfer.files[0])};
+  renderHistory();
+})();
+
+function showToast(msg,dur=2200){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",dur);}
+function toggleKeyVisibility(){const inp=document.getElementById("or-key-input");const ic=document.getElementById("eye-icon");if(inp.type==="password"){inp.type="text";ic.className="ti ti-eye-off"}else{inp.type="password";ic.className="ti ti-eye"}}
+function saveOrKey(){const v=document.getElementById("or-key-input").value.trim();if(!v){showToast("⚠ Vui lòng nhập API key");return;}if(!v.startsWith("sk-or-")){showToast("⚠ Key phải bắt đầu bằng sk-or-");return;}lsSet("or_key",v);document.getElementById("key-saved").style.display="inline-flex";showToast("✅ Đã lưu OpenRouter key!");}
+function copyAppUrl(){navigator.clipboard.writeText(window.location.href);showToast("📋 Đã sao chép link!");}
+
+function handleFile(file){
+  if(!file||!file.type.startsWith("image/"))return;
+  imgMime=file.type||"image/jpeg";
+  const reader=new FileReader();
+  reader.onload=ev=>{imgSrc=ev.target.result;imgBase64=imgSrc.split(",")[1];document.getElementById("preview-img").src=imgSrc;document.getElementById("image-section").style.display="block";document.getElementById("exam-section").style.display="none";document.getElementById("results-section").style.display="none";setBadge(null);remixText=null;solutionText=null;};
+  reader.readAsDataURL(file);
+}
+
+function setBadge(status){
+  const el=document.getElementById("digitize-badge");
+  if(!status){el.innerHTML="";return;}
+  const map={loading:"loading",done:"done",error:"error"};
+  const labels={loading:"Đang số hóa...",done:"✓ Số hóa xong",error:"⚠ Lỗi"};
+  el.innerHTML=`<span class="badge ${map[status]}">${status==="loading"?'<span class="spinner"></span>':""} ${labels[status]}</span>`;
+}
+
+async function callClaude(messages,max_tokens=4096){
+  const res=await fetch(ANTHROPIC_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens,messages})});
+  const d=await res.json();if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+  return d.content?.map(b=>b.text||"").join("")||"";
+}
+async function callOR(model,prompt,orKey){
+  const res=await fetch(OR_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${orKey}`},body:JSON.stringify({model,max_tokens:4096,messages:[{role:"user",content:prompt}]})});
+  const d=await res.json();if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+  return d.choices?.[0]?.message?.content||"";
+}
+
+async function runDigitize(){
+  if(!imgBase64)return;
+  const note=document.getElementById("note-input").value.trim();
+  const notePrompt=note?`\n\nLưu ý từ người dùng: ${note}`:"";
+  const prompt=`Hãy số hóa toàn bộ nội dung đề thi trong ảnh. Giữ nguyên cấu trúc, số thứ tự, các lựa chọn A/B/C/D nếu có. Chỉ trả về nội dung đề thi, không thêm lời dẫn hay giải thích.${notePrompt}`;
+  const btn=document.getElementById("digitize-btn");
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Đang số hóa...';
+  setBadge("loading");document.getElementById("exam-text").value="";
+  try{
+    const text=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:imgMime,data:imgBase64}},{type:"text",text:prompt}]}]);
+    document.getElementById("exam-text").value=text;document.getElementById("exam-section").style.display="block";
+    setBadge("done");showToast("✅ Số hóa thành công!");
+    addToHistory(imgSrc,note||"Đề thi",text);
+  }catch(e){setBadge("error");showToast("❌ "+e.message,3500);}
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-sparkles" aria-hidden="true"></i> Số hóa bằng Claude';
+}
+
+async function runAI(type){
+  const content=document.getElementById("exam-text").value.trim();
+  if(!content){showToast("⚠ Chưa có đề thi");return;}
+  const sel=document.getElementById("model-select").value;
+  const isClaude=sel==="claude";const orKey=lsGet("or_key");
+  if(!isClaude&&!orKey){showToast("⚠ Cần nhập OpenRouter key");return;}
+  const prompt=type==="remix"
+    ?`Đây là đề thi gốc:\n\n${content}\n\nHãy tạo một ĐỀ THI MỚI HOÀN TOÀN: cùng môn, cùng cấu trúc, cùng số câu, cùng mức độ — nhưng thay đổi toàn bộ nội dung, số liệu, và đáp án. KHÔNG giải thích, chỉ trả về đề thi mới.`
+    :`Đây là đề thi:\n\n${content}\n\nHãy viết HƯỚNG DẪN GIẢI CHI TIẾT từng câu. Với mỗi câu: phân tích đề → các bước giải → đáp án → lý giải. Trình bày rõ ràng, đánh số câu đầy đủ.`;
+  const btnId=type==="remix"?"remix-btn":"solution-btn";
+  const btn=document.getElementById(btnId);
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Đang xử lý...';
+  document.getElementById("results-section").style.display="block";switchTab(type);
+  const panelId="panel-"+type;
+  document.getElementById(panelId).innerHTML=`<div class="result-card"><div style="font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:8px"><span class="spinner"></span> Đang tạo...</div></div>`;
+  try{
+    let text;if(isClaude)text=await callClaude([{role:"user",content:prompt}],4096);else text=await callOR(sel,prompt,orKey);
+    if(type==="remix")remixText=text;else solutionText=text;
+    renderResult(panelId,text,type==="remix"?"De_thi_remix":"Huong_dan_giai");
+    updateComparePanel();showToast("✅ Xong!");
+  }catch(e){document.getElementById(panelId).innerHTML=`<div class="result-card" style="border-color:var(--color-border-danger)"><p style="font-size:12px;color:var(--color-text-danger)">⚠ ${e.message}</p></div>`;showToast("❌ "+e.message,3500);}
+  btn.disabled=false;
+  btn.innerHTML=type==="remix"?'<i class="ti ti-refresh" aria-hidden="true"></i> Remix đề mới':'<i class="ti ti-bulb" aria-hidden="true"></i> Hướng dẫn giải';
+}
+
+function renderResult(panelId,text,title){
+  const t=JSON.stringify(text),ti=JSON.stringify(title);
+  document.getElementById(panelId).innerHTML=`<div class="result-card"><pre class="result-content">${escHtml(text)}</pre><div class="result-actions"><button class="btn-amber" onclick="saveDocx(${t},${ti})"><i class="ti ti-file-word" aria-hidden="true"></i> .docx</button><button class="btn-amber" onclick="savePdf(${t},${ti})"><i class="ti ti-file-type-pdf" aria-hidden="true"></i> .pdf</button><button onclick="copyText(${t})"><i class="ti ti-copy" aria-hidden="true"></i> Sao chép</button></div></div>`;
+}
+
+function updateComparePanel(){
+  const orig=document.getElementById("exam-text").value.trim();
+  if(!orig||!remixText){document.getElementById("panel-compare").innerHTML=`<p style="font-size:12px;color:var(--color-text-tertiary);padding:1rem 0">Cần có cả đề gốc và đề remix để so sánh.</p>`;return;}
+  document.getElementById("panel-compare").innerHTML=`<div class="compare-grid"><div class="compare-col"><h3><i class="ti ti-file-description" style="font-size:12px" aria-hidden="true"></i> Đề gốc</h3><pre style="font-size:12px;line-height:1.65;white-space:pre-wrap;font-family:inherit;color:var(--color-text-primary)">${escHtml(orig)}</pre></div><div class="compare-col"><h3><i class="ti ti-refresh" style="font-size:12px" aria-hidden="true"></i> Đề remix</h3><pre style="font-size:12px;line-height:1.65;white-space:pre-wrap;font-family:inherit;color:var(--color-text-primary)">${escHtml(remixText)}</pre></div></div>`;
+}
+
+function switchTab(tab){
+  ["remix","solution","compare"].forEach(t=>{document.getElementById("tab-"+t).className="tab"+(t===tab?" active":"");document.getElementById("panel-"+t).style.display=t===tab?"block":"none";});
+  if(tab==="compare")updateComparePanel();
+}
+
+function escHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function copyText(txt){navigator.clipboard.writeText(txt);showToast("📋 Đã sao chép!");}
+function clearAll(){imgBase64=null;imgSrc=null;remixText=null;solutionText=null;document.getElementById("image-section").style.display="none";document.getElementById("exam-section").style.display="none";document.getElementById("exam-text").value="";document.getElementById("note-input").value="";setBadge(null);}
+
+function saveDocx(txt,title){
+  if(!window.docx){showToast("⚠ Thư viện docx chưa sẵn sàng");return;}
+  const{Document,Packer,Paragraph,TextRun,HeadingLevel}=window.docx;
+  const doc=new Document({sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},children:[new Paragraph({heading:HeadingLevel.HEADING_1,children:[new TextRun({text:title,bold:true,size:32})]}), ...txt.split("\n").map(l=>new Paragraph({children:[new TextRun({text:l,size:24,font:"Arial"})]}))]}]});
+  Packer.toBlob(doc).then(blob=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=title.replace(/[^a-zA-Z0-9_\-]/g,"_")+".docx";a.click();showToast("✅ Đã lưu .docx!");});
+}
+
+function savePdf(txt,title){
+  if(!window.jspdf){showToast("⚠ Thư viện PDF chưa sẵn sàng");return;}
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:"p",unit:"mm",format:"a4"});
+  const margin=18,maxW=210-margin*2;let y=20;
+  doc.setFont("helvetica","bold");doc.setFontSize(14);doc.text(title,margin,y);y+=9;
+  doc.setFont("helvetica","normal");doc.setFontSize(11);
+  doc.splitTextToSize(txt,maxW).forEach(line=>{if(y>278){doc.addPage();y=20;}doc.text(line,margin,y);y+=6;});
+  doc.save(title.replace(/[^a-zA-Z0-9_\-]/g,"_")+".pdf");showToast("✅ Đã lưu .pdf!");
+}
+
+function savePng(){
+  const txt=document.getElementById("exam-text").value.trim();
+  if(!txt){showToast("⚠ Chưa có nội dung đề thi");return;}
+  if(!window.html2canvas){showToast("⚠ Thư viện PNG chưa sẵn sàng");return;}
+  const container=document.createElement("div");
+  container.style.cssText="width:794px;padding:48px 56px;background:#ffffff;font-family:Arial,sans-serif;font-size:14px;line-height:1.8;color:#1a1a1a;white-space:pre-wrap;position:fixed;top:-9999px;left:-9999px";
+  const title=document.createElement("h2");title.style.cssText="font-size:17px;font-weight:bold;margin-bottom:16px;text-align:center";title.textContent="ĐỀ THI";container.appendChild(title);
+  const content=document.createElement("pre");content.style.cssText="font-family:inherit;white-space:pre-wrap;font-size:13px;line-height:1.8;color:#1a1a1a";content.textContent=txt;container.appendChild(content);
+  document.body.appendChild(container);showToast("⏳ Đang xuất PNG...",3000);
+  html2canvas(container,{scale:2,backgroundColor:"#ffffff",useCORS:true}).then(canvas=>{document.body.removeChild(container);const a=document.createElement("a");a.href=canvas.toDataURL("image/png");a.download="De_thi.png";a.click();showToast("✅ Đã xuất ảnh PNG!");}).catch(e=>{document.body.removeChild(container);showToast("❌ Lỗi: "+e.message,3500);});
+}
+
+function addToHistory(src,note,text){
+  let hist=[];try{hist=JSON.parse(lsGet("exam_history"))||[]}catch{}
+  hist.unshift({id:Date.now(),thumb:src,note:note.slice(0,40),full:text,date:new Date().toLocaleString("vi-VN")});
+  if(hist.length>10)hist=hist.slice(0,10);lsSet("exam_history",JSON.stringify(hist));renderHistory();
+}
+
+function renderHistory(){
+  const listEl=document.getElementById("history-list");
+  let hist=[];try{hist=JSON.parse(lsGet("exam_history"))||[]}catch{}
+  if(!hist.length){listEl.innerHTML='<p style="font-size:12px;color:var(--color-text-tertiary)">Chưa có đề nào trong lịch sử.</p>';return;}
+  listEl.innerHTML=hist.map(h=>`<div class="history-item" onclick="loadFromHistory(${h.id})"><img class="history-thumb" src="${h.thumb}" alt="thumb"/><div class="history-info"><div class="history-title">${escHtml(h.note||"Đề thi")}</div><div class="history-meta">${h.date} · ${h.full.length} ký tự</div></div><button style="flex-shrink:0;padding:3px 8px;font-size:11px" onclick="event.stopPropagation();deleteHistory(${h.id})"><i class="ti ti-trash" aria-hidden="true"></i></button></div>`).join("");
+}
+
+function loadFromHistory(id){
+  let hist=[];try{hist=JSON.parse(lsGet("exam_history"))||[]}catch{}
+  const entry=hist.find(h=>h.id===id);if(!entry)return;
+  document.getElementById("exam-text").value=entry.full;document.getElementById("exam-section").style.display="block";document.getElementById("history-panel").style.display="none";showToast("✅ Đã tải đề từ lịch sử!");
+}
+
+function deleteHistory(id){let hist=[];try{hist=JSON.parse(lsGet("exam_history"))||[]}catch{}hist=hist.filter(h=>h.id!==id);lsSet("exam_history",JSON.stringify(hist));renderHistory();}
+function clearHistory(){lsSet("exam_history","[]");renderHistory();showToast("🗑 Đã xóa lịch sử");}
+</script>
